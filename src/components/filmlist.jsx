@@ -1,5 +1,5 @@
 // components/filmlist.jsx
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import namefilmlist from './dadosGhibli'; // Seu array que veio via export default
 
 function FilmList() {
