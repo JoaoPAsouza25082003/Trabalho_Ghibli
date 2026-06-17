@@ -1,17 +1,11 @@
-src/components/CartaoFilme.jsx
+// src/components/CartaoFilme.jsx
 
-// O componente recebe os dados puros via PROPS do seu serviço
-function CartaoFilme({ title, image, description }) {
+function CartaoFilme({ title, description, image }) {
   return (
     <div className="cartao-filme">
-      {/* 1. Título em primeiro */}
       <h3>{title}</h3>
-      
-      {/* 2. Descrição no meio */}
       <p>{description}</p>
-      
-      {/* 3. Imagem por último */}
-      <img src={image} alt={title} />
+      <img src={image} alt={title} style={{ maxWidth: '150px', height: 'auto' }} />
     </div>
   );
 }

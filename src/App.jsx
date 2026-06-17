@@ -1,63 +1,39 @@
 // src/App.jsx
-import { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-// 1. IMPORTA O SERVIÇO: Busca os dados na API e limpa no Mapper
-import { getFilmes } from './services/ServicoBusca';
-
-// 2. IMPORTA O CARTÃO: Com o nome correto (CartaoFilme) que está na sua pasta
-import CartaoFilme from './components/CartaoFilme';
-
-// 3. IMPORTA OS COMPONENTES DE ESTRUTURA (Com as letras minúsculas exatas do seu print)
+// Importa os componentes de estrutura
 import Header from './components/header';
 import Navbar from './components/navbar';
 import Footer from './components/footer';
 
+// Importa as TRÊS páginas do sistema
+import AboutPage from './pages/AboutPage';
+import Sobre from './pages/Sobre';
+import ConsultaDeFilmes from './pages/ConsultaDeFilmes'; 
+
 function App() {
-  const [filmes, setFilmes] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const puxarDadosDaAPI = async () => {
-      try {
-        setLoading(true);
-        const dadosMapeados = await getFilmes();
-        setFilmes(dadosMapeados); 
-      } catch (erro) {
-        console.error("Erro ao carregar a API do Ghibli:", erro);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    puxarDadosDaAPI();
-  }, []);
-
   return (
-    <div className="app-container">
-      <Header />
-      <Navbar />
+    <Router>
+      <div className="app-container">
+        <Header />
+        <Navbar />
 
-      <main className="conteudo-principal">
-        <h2>Catálogo de Filmes Studio Ghibli</h2>
+        <main className="conteudo-principal">
+          <Routes>
+            {/* Página inicial (/) carrega a explicação do projeto */}
+            <Route path="/" element={<AboutPage />} />
+            
+            {/* Rota /sobre carrega os créditos com os nomes de vocês */}
+            <Route path="/sobre" element={<Sobre />} />
+            
+            {/* Rota /filmes carrega a listagem dos cartões do Studio Ghibli */}
+            <Route path="/filmes" element={<ConsultaDeFilmes />} />
+          </Routes>
+        </main>
 
-        {loading ? (
-          <p>Carregando os filmes direto da API...</p>
-        ) : (
-          <div className="lista-filmes">
-            {filmes.map((filme) => (
-              <CartaoFilme 
-                key={filme.id}
-                title={filme.title}
-                description={filme.description}
-                image={filme.image} 
-              />
-            ))}
-          </div>
-        )}
-      </main>
-
-      <Footer />
-    </div>
+        <Footer />
+      </div>
+    </Router>
   );
 }
 

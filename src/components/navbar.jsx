@@ -1,15 +1,16 @@
 // src/components/navbar.jsx
+import { Link } from 'react-router-dom';
 
 function Navbar() {
   return (
     <nav className="menu-navegacao">
-      {/* O conteúdo que você já tiver aí dentro */}
       <ul>
-        <li>Início</li>
+        <li><Link to="/">Início</Link></li>
+        <li><Link to="/sobre">Sobre</Link></li>
+        <li><Link to="/filmes">Consulta de filmes</Link></li>
       </ul>
     </nav>
   );
 }
 
-// ADICIONE ESSA LINHA EXATAMENTE ASSIM NO FINAL DO SEU ARQUIVO:
 export default Navbar;
