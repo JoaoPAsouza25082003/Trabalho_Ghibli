@@ -1,4 +1,3 @@
-// src/components/CartaoFilme.jsx
 
 function CartaoFilme({ title, description, image }) {
   return (

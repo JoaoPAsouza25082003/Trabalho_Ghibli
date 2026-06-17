@@ -1,4 +1,3 @@
-// src/components/header.jsx
 
 function Header() {
   return (
@@ -7,6 +6,4 @@ function Header() {
     </header>
   );
 }
-
-// ADICIONE ESSA LINHA EXATAMENTE ASSIM NO FINAL DO SEU ARQUIVO:
 export default Header;

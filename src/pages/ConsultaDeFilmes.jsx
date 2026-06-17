@@ -1,32 +1,50 @@
 // src/pages/ConsultaDeFilmes.jsx
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getFilmes } from '../services/ServicoBusca';
 import CartaoFilme from '../components/CartaoFilme';
+import BarraPesquisa from '../components/BarraPesquisa'; // Importa o novo componente
 
 function ConsultaDeFilmes() {
   const [filmes, setFilmes] = useState([]);
   const [loading, setLoading] = useState(true);
-  
-  // Novo estado para guardar o texto digitado na pesquisa
   const [pesquisa, setPesquisa] = useState('');
+  
+  const navigate = useNavigate();
 
   useEffect(() => {
+    let active = true; // Flag de controle para o Cleanup
+
     const puxarDadosDaAPI = async () => {
       try {
         setLoading(true);
         const dadosMapeados = await getFilmes();
+        
+        // Se o usuário saiu da página durante a requisição, interrompe a execução
+        if (!active) return; 
+
+        if (!dadosMapeados || dadosMapeados.length === 0) {
+          navigate('/404');
+          return;
+        }
+
         setFilmes(dadosMapeados); 
       } catch (erro) {
         console.error("Erro ao carregar a API do Ghibli:", erro);
+        if (active) navigate('/404');
       } finally {
-        setLoading(false);
+        if (active) setLoading(false);
       }
     };
 
     puxarDadosDaAPI();
-  }, []);
 
-  // Filtra os filmes comparando o título com o texto da pesquisa (ignorando maiúsculas/minúsculas)
+    // Função de Cleanup executada ao desmontar o componente
+    return () => {
+      active = false; 
+    };
+  }, [navigate]);
+
   const filmesFiltrados = filmes.filter((filme) =>
     filme.title.toLowerCase().includes(pesquisa.toLowerCase())
   );
@@ -35,32 +53,16 @@ function ConsultaDeFilmes() {
     <div className="consulta-container">
       <h2>Catálogo de Filmes Studio Ghibli</h2>
 
-      {/* Barra de Pesquisa */}
-      <div className="barra-pesquisa" style={{ marginBottom: '20px' }}>
-        <input
-          type="text"
-          placeholder="Pesquisar filme pelo nome..."
-          value={pesquisa}
-          onChange={(e) => setPesquisa(e.target.value)}
-          style={{
-            padding: '10px',
-            width: '10px', // O CSS externo ou flexbox costuma controlar, ajuste se necessário
-            minWidth: '250px',
-            borderRadius: '5px',
-            border: '1px solid #ccc'
-          }}
-        />
-      </div>
+      {/* Uso do novo componente reutilizável de busca */}
+      <BarraPesquisa valor={pesquisa} aoAlterar={setPesquisa} />
 
       {loading ? (
         <p>Carregando os filmes direto da API...</p>
       ) : (
         <div className="lista-filmes">
-          {/* Se a pesquisa não encontrar nada, avisa o usuário */}
           {filmesFiltrados.length === 0 ? (
             <p>Nenhum filme encontrado com o nome "{pesquisa}".</p>
           ) : (
-            // Mapeia apenas os filmes filtrados pela pesquisa
             filmesFiltrados.map((filme) => (
               <CartaoFilme 
                 key={filme.id}

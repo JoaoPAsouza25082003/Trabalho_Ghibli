@@ -1,13 +1,33 @@
-// src/components/navbar.jsx
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 function Navbar() {
   return (
     <nav className="menu-navegacao">
       <ul>
-        <li><Link to="/">Início</Link></li>
-        <li><Link to="/sobre">Sobre</Link></li>
-        <li><Link to="/filmes">Consulta de filmes</Link></li>
+        <li>
+          <NavLink 
+            to="/" 
+            style={({ isActive }) => ({ color: isActive ? '#007bff' : '#333', fontWeight: isActive ? 'bold' : 'normal' })}
+          >
+            Início
+          </NavLink>
+        </li>
+        <li>
+          <NavLink 
+            to="/sobre" 
+            style={({ isActive }) => ({ color: isActive ? '#007bff' : '#333', fontWeight: isActive ? 'bold' : 'normal' })}
+          >
+            Sobre
+          </NavLink>
+        </li>
+        <li>
+          <NavLink 
+            to="/filmes" 
+            style={({ isActive }) => ({ color: isActive ? '#007bff' : '#333', fontWeight: isActive ? 'bold' : 'normal' })}
+          >
+            Consulta de filmes
+          </NavLink>
+        </li>
       </ul>
     </nav>
   );
