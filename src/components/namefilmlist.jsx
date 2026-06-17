@@ -1,16 +1,24 @@
-// components/dadosGhibli.js
+// src/components/namefilmlist.jsx
 
-let namefilmlist = [];
+// 1. O seu array que começa vazio (agora vai receber objetos com título e descrição)
+export const namefilmlist = [];
 
-function carregarNomesGhibli() {
-  fetch('https://ghibliapi.dev/films')
-    .then(res => res.json()) 
-    .then(data => {
-      namefilmlist.push(...data.map(film => film.title));
-    })
+// 2. Componente vazio necessário para o Vite aceitar arquivos .jsx
+export default function NameFilmList() {
+  return null;
 }
 
-carregarNomesGhibli();
+// 3. O seu fetch que puxa os dados do site e armazena título e descrição
+fetch('https://ghibliapi.dev/films')
+  .then(res => res.json())
+  .then(data => {
+    // Criamos objetos contendo o título e a descrição de cada filme
+    const listaComDescricoes = data.map(f => ({
+      title: f.title,
+      description: f.description
+    }));
 
-// EXPORT DEFAULT IGUAL AO DO POKÉMON (Apenas para o array)
-export default namefilmlist;
+    // Coloca os objetos dentro do seu array original
+    namefilmlist.push(...listaComDescricoes);
+  })
+  .catch(err => console.error("Erro ao buscar filmes da API:", err));
